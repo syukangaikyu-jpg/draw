@@ -31,7 +31,7 @@ async function draw() {
     if (data.result === "win") {
       document.getElementById("result").innerHTML =
         "🎉 当選！こちらから住所を入力してください 👉 " +
-        "<a href='https://docs.google.com/forms/d/あなたのフォームID/viewform' target='_blank'>当選者フォーム</a>";
+        "<a href='https://docs.google.com/forms/d/https://forms.gle/i2LQe7MFNzf55JfV9/viewform' target='_blank'>当選者フォーム</a>";
       localStorage.setItem(KEY, "win"); // 抽選済みフラグを保存
     } else {
       document.getElementById("result").innerHTML = "😢 ハズレ…また挑戦してね！";
