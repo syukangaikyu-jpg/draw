@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>週刊鎧球 WEEK50 抽選</title>
+</head>
+<body style="font-family:sans-serif; text-align:center; padding:50px;">
+  <h1>WEEK50 記念 抽選</h1>
+  <p>「抽選する」を押すと当落が出ます。<br>当たりは先着5名限定！</p>
+  <button onclick="draw()">抽選する</button>
+  <div id="result" style="margin-top:20px; font-size:18px;"></div>
+
+<script>
+  // ここにあとでGoogle Apps ScriptのURLを入れます
+  const WEB_APP_URL = "https://script.google.com/macros/s/ここにURL/exec";
+
+  async function draw() {
+    try {
+      let res = await fetch(WEB_APP_URL);
+      let data = await res.json();
+
+      if (data.result === "win") {
+        document.getElementById("result").innerHTML = "🎉 当選！フォームはこちら👉 <a href='https://docs.google.com/forms/d/フォームのURL/viewform' target='_blank'>入力フォーム</a>";
+      } else if (data.result === "closed") {
+        document.getElementById("result").textContent = "当選枠は終了しました🙏";
+      } else {
+        document.getElementById("result").textContent = "😢 ハズレ！また挑戦してね！";
+      }
+    } catch(e) {
+      document.getElementById("result").textContent = "エラー：設定を確認してください。";
+    }
+  }
+</script>
+</body>
+</html>
