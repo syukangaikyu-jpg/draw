@@ -14,23 +14,33 @@
 <script>
   // ここにあとでGoogle Apps ScriptのURLを入れます
   const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzATnE64sDfTqsZruBA1RoDFh3fRzogZaozg5juIlrfApDOH_55_zn3kJX6YyAx63M8Sw/exec";
+const KEY = "sg_week50_draw_done"; // この端末で抽選したかどうか記録するキー
 
-  async function draw() {
-    try {
-      let res = await fetch(WEB_APP_URL);
-      let data = await res.json();
-
-      if (data.result === "win") {
-        document.getElementById("result").innerHTML = "🎉 当選！フォームはこちら👉 <a href='https://docs.google.com/forms/d/フォームのURL/viewform' target='_blank'>入力フォーム</a>";
-      } else if (data.result === "closed") {
-        document.getElementById("result").textContent = "当選枠は終了しました🙏";
-      } else {
-        document.getElementById("result").textContent = "😢 ハズレ！また挑戦してね！";
-      }
-    } catch(e) {
-      document.getElementById("result").textContent = "エラー：設定を確認してください。";
-    }
+async function draw() {
+  // すでに抽選済みなら再挑戦不可
+  if (localStorage.getItem(KEY)) {
+    document.getElementById("result").innerHTML =
+      "⚠️ この端末では抽選は1回までです。";
+    return;
   }
+
+  try {
+    let res = await fetch(WEB_APP_URL);
+    let data = await res.json();
+
+    if (data.result === "win") {
+      document.getElementById("result").innerHTML =
+        "🎉 当選！こちらから住所を入力してください 👉 " +
+        "<a href='https://docs.google.com/forms/d/あなたのフォームID/viewform' target='_blank'>当選者フォーム</a>";
+      localStorage.setItem(KEY, "win"); // 抽選済みフラグを保存
+    } else {
+      document.getElementById("result").innerHTML = "😢 ハズレ…また挑戦してね！";
+      localStorage.setItem(KEY, "lose"); // 抽選済みフラグを保存
+    }
+  } catch (e) {
+    document.getElementById("result").innerHTML = "通信エラー：設定を確認してください。";
+  }
+}
 </script>
 </body>
 </html>
